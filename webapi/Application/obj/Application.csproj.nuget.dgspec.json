@@ -28,9 +28,6 @@
             "projectReferences": {
               "/Users/brendanbaker/Documents/gitHub/pantry/webapi/Domain/Domain.csproj": {
                 "projectPath": "/Users/brendanbaker/Documents/gitHub/pantry/webapi/Domain/Domain.csproj"
-              },
-              "/Users/brendanbaker/Documents/gitHub/pantry/webapi/Persistence/Persistence.csproj": {
-                "projectPath": "/Users/brendanbaker/Documents/gitHub/pantry/webapi/Persistence/Persistence.csproj"
               }
             }
           }
@@ -107,68 +104,24 @@
       "frameworks": {
         "net8.0": {
           "targetAlias": "net8.0",
-          "imports": [
-            "net461",
-            "net462",
-            "net47",
-            "net471",
-            "net472",
-            "net48",
-            "net481"
-          ],
-          "assetTargetFallback": true,
-          "warn": true,
-          "frameworkReferences": {
-            "Microsoft.NETCore.App": {
-              "privateAssets": "all"
+          "dependencies": {
+            "MediatR": {
+              "target": "Package",
+              "version": "[11.1.0, )"
+            },
+            "MediatR.Extensions.Microsoft.DependencyInjection": {
+              "target": "Package",
+              "version": "[11.1.0, )"
+            },
+            "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[8.0.7, )"
+            },
+            "Microsoft.EntityFrameworkCore.Relational": {
+              "target": "Package",
+              "version": "[8.0.7, )"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/8.0.302/PortableRuntimeIdentifierGraph.json"
-        }
-      }
-    },
-    "/Users/brendanbaker/Documents/gitHub/pantry/webapi/Persistence/Persistence.csproj": {
-      "version": "1.0.0",
-      "restore": {
-        "projectUniqueName": "/Users/brendanbaker/Documents/gitHub/pantry/webapi/Persistence/Persistence.csproj",
-        "projectName": "Persistence",
-        "projectPath": "/Users/brendanbaker/Documents/gitHub/pantry/webapi/Persistence/Persistence.csproj",
-        "packagesPath": "/Users/brendanbaker/.nuget/packages/",
-        "outputPath": "/Users/brendanbaker/Documents/gitHub/pantry/webapi/Persistence/obj/",
-        "projectStyle": "PackageReference",
-        "configFilePaths": [
-          "/Users/brendanbaker/.nuget/NuGet/NuGet.Config"
-        ],
-        "originalTargetFrameworks": [
-          "net8.0"
-        ],
-        "sources": {
-          "https://api.nuget.org/v3/index.json": {}
-        },
-        "frameworks": {
-          "net8.0": {
-            "targetAlias": "net8.0",
-            "projectReferences": {
-              "/Users/brendanbaker/Documents/gitHub/pantry/webapi/Domain/Domain.csproj": {
-                "projectPath": "/Users/brendanbaker/Documents/gitHub/pantry/webapi/Domain/Domain.csproj"
-              }
-            }
-          }
-        },
-        "warningProperties": {
-          "warnAsError": [
-            "NU1605"
-          ]
-        },
-        "restoreAuditProperties": {
-          "enableAudit": "true",
-          "auditLevel": "low",
-          "auditMode": "direct"
-        }
-      },
-      "frameworks": {
-        "net8.0": {
-          "targetAlias": "net8.0",
           "imports": [
             "net461",
             "net462",

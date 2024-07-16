@@ -28,6 +28,12 @@
             "projectReferences": {
               "/Users/brendanbaker/Documents/gitHub/pantry/webapi/Application/Application.csproj": {
                 "projectPath": "/Users/brendanbaker/Documents/gitHub/pantry/webapi/Application/Application.csproj"
+              },
+              "/Users/brendanbaker/Documents/gitHub/pantry/webapi/Domain/Domain.csproj": {
+                "projectPath": "/Users/brendanbaker/Documents/gitHub/pantry/webapi/Domain/Domain.csproj"
+              },
+              "/Users/brendanbaker/Documents/gitHub/pantry/webapi/Persistence/Persistence.csproj": {
+                "projectPath": "/Users/brendanbaker/Documents/gitHub/pantry/webapi/Persistence/Persistence.csproj"
               }
             }
           }
@@ -47,6 +53,10 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "dependencies": {
+            "MediatR": {
+              "target": "Package",
+              "version": "[11.1.0, )"
+            },
             "Microsoft.AspNetCore.Identity.EntityFrameworkCore": {
               "target": "Package",
               "version": "[8.0.7, )"
@@ -107,9 +117,6 @@
             "projectReferences": {
               "/Users/brendanbaker/Documents/gitHub/pantry/webapi/Domain/Domain.csproj": {
                 "projectPath": "/Users/brendanbaker/Documents/gitHub/pantry/webapi/Domain/Domain.csproj"
-              },
-              "/Users/brendanbaker/Documents/gitHub/pantry/webapi/Persistence/Persistence.csproj": {
-                "projectPath": "/Users/brendanbaker/Documents/gitHub/pantry/webapi/Persistence/Persistence.csproj"
               }
             }
           }
@@ -186,6 +193,24 @@
       "frameworks": {
         "net8.0": {
           "targetAlias": "net8.0",
+          "dependencies": {
+            "MediatR": {
+              "target": "Package",
+              "version": "[11.1.0, )"
+            },
+            "MediatR.Extensions.Microsoft.DependencyInjection": {
+              "target": "Package",
+              "version": "[11.1.0, )"
+            },
+            "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[8.0.7, )"
+            },
+            "Microsoft.EntityFrameworkCore.Relational": {
+              "target": "Package",
+              "version": "[8.0.7, )"
+            }
+          },
           "imports": [
             "net461",
             "net462",
@@ -228,6 +253,9 @@
           "net8.0": {
             "targetAlias": "net8.0",
             "projectReferences": {
+              "/Users/brendanbaker/Documents/gitHub/pantry/webapi/Application/Application.csproj": {
+                "projectPath": "/Users/brendanbaker/Documents/gitHub/pantry/webapi/Application/Application.csproj"
+              },
               "/Users/brendanbaker/Documents/gitHub/pantry/webapi/Domain/Domain.csproj": {
                 "projectPath": "/Users/brendanbaker/Documents/gitHub/pantry/webapi/Domain/Domain.csproj"
               }
@@ -250,6 +278,10 @@
           "targetAlias": "net8.0",
           "dependencies": {
             "Microsoft.AspNetCore.Identity.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[8.0.7, )"
+            },
+            "Microsoft.EntityFrameworkCore.Sqlite": {
               "target": "Package",
               "version": "[8.0.7, )"
             }

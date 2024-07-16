@@ -1,12 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
+using Application.Common.Interfaces;
 
 namespace Persistence;
-public class PantryDbContext
+public class PantryDbContext : DbContext
 {
     private readonly string _connectionString;
 

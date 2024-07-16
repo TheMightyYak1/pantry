@@ -10,6 +10,8 @@ public class PantryItem
     public Guid PantryItemId { get; set;}
     public string Name { get; set; }
     public PantryItemType PantryItemType { get; set; }
+    public int Quantity { get; set; }
+    public UnitType Type { get; set; }
 
     public PantryItem(string name, PantryItemType pantryItemType)
     {
