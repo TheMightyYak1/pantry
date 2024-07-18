@@ -22,7 +22,7 @@ public class GetPantryItems
         
         }
 
-        public Task<Result<Unit>> Handle(Query request, CancellationToken cancellationToken)
+        public async Task<Result<Unit>> Handle(Query request, CancellationToken cancellationToken)
         {
             throw new NotImplementedException();
         }
