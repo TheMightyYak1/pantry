@@ -9,15 +9,17 @@ public class PantryItem
 {
     public Guid PantryItemId { get; set;}
     public string Name { get; set; }
+    public string Description { get; set; }
     public PantryItemType PantryItemType { get; set; }
-    public int Quantity { get; set; }
-    public UnitType Type { get; set; }
+    public UnitType UnitType { get; set; }
 
-    public PantryItem(string name, PantryItemType pantryItemType)
+    public PantryItem(string name, string description, PantryItemType pantryItemType, UnitType unitType)
     {
         PantryItemId = Guid.NewGuid();
         Name = name;
+        Description = description;
         PantryItemType = pantryItemType;
+        UnitType = unitType;
     }
 
 }
