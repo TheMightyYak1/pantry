@@ -29,13 +29,33 @@ public class CreatePantryItem
 
     public class Handler :IRequestHandler<Command, Result<PantryItem>>
     {
-        public Handler()
-        {
+        private readonly IMediator _mediator;
 
+        public Handler(IMediator mediator)
+        {
+            _mediator = mediator;
         }
 
         public async Task<Result<PantryItem>> Handle(Command command, CancellationToken cancellationToken)
         {
+            // check if Pantry Item exists
+
+            // var operativeConnectedWallet = await _DbContext.Operatives
+            //     .Where(o => o.OperativeId == command.OperativeId)
+            //     .Select(o => o.ConnectedWalletAddress)
+            //     .FirstOrDefaultAsync(cancellationToken);
+
+            // // need to check for case sensitivity
+            // var ifPantryItemExists = await _pantryDbContext.PantryItems
+            //     .Where(p => p.Name == command.Name)
+            //     .FirstOrDefaultAsync(cancellationToken);
+
+            // if (ifPantryItemExists != null)
+            // {
+            //     // TODO: Throw proper typed exception
+            //     throw new Exception("Pantry Item aleady exists");
+            // }
+
             var newPantryItem = new PantryItem
             (
                 command.Name,
@@ -44,14 +64,13 @@ public class CreatePantryItem
                 command.UnitType
             );
 
+            // _pantryDbContext.PantryItems.Add(newPantryItem);
 
-            // var result = await _context.SaveChangesAsync() > 0;
+            // var result = await _pantryDbContext.SaveChangesAsync() > 0;
 
-            //if (!result) return Result<Unit>.Failure("Failed to create activity");
+           // if (!result) return Result<PantryItem>.Failure("Failed to create activity");
 
-
-            throw new NotImplementedException();
-
+            return Result<PantryItem>.Success(newPantryItem);
         }
     }
 }
