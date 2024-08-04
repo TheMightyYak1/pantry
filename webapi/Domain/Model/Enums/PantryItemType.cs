@@ -5,5 +5,6 @@ public enum PantryItemType
     Fruit = 1,
     Meat = 2,
     Nut = 3,
-    Perishable = 4
+    Perishable = 4,
+    NonPerishable = 5
 }

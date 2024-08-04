@@ -32,7 +32,8 @@ var services = scope.ServiceProvider;
 try
 {
     var context = services.GetRequiredService<PantryDbContext>();
-    context.Database.Migrate();
+    await context.Database.MigrateAsync();
+    await Seed.SeedData(context);
 }
 catch (Exception ex)
 {
