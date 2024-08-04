@@ -1,2 +1,12 @@
 
 *.dll
+
+# bin and obj .NET folders
+/bin
+/obj
+bin
+obj
+packages
+*.suo
+*.user
+_ReSharper.*
