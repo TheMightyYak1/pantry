@@ -23,5 +23,9 @@ yarn-debug.log*
 yarn-error.log*
 
 # bin and obj .NET folders
-/bin
-/obj
+bin
+obj
+packages
+*.suo
+*.user
+_ReSharper.*
