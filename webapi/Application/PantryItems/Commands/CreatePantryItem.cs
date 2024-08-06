@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
+using Application.Common.Interfaces;
 using Application.Core;
 using Domain.Entities;
 using Domain.Model.Enums;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 
 namespace Application.PantryItems.Commands;
 public class CreatePantryItem
@@ -30,31 +32,24 @@ public class CreatePantryItem
     public class Handler :IRequestHandler<Command, Result<PantryItem>>
     {
         private readonly IMediator _mediator;
+        private readonly IPantryDbContext _pantryDbContext;
 
-        public Handler(IMediator mediator)
+        public Handler(
+            IMediator mediator,
+            IPantryDbContext pantryDbContext)
         {
             _mediator = mediator;
+            _pantryDbContext = pantryDbContext;
         }
 
         public async Task<Result<PantryItem>> Handle(Command command, CancellationToken cancellationToken)
         {
-            // check if Pantry Item exists
+            // check if PantryItem already exists
+            var ifPantryItemExists = await _pantryDbContext.PantryItems
+                .Where(p => p.Name.ToLower() == command.Name.ToLower())
+                .FirstOrDefaultAsync(cancellationToken);
 
-            // var operativeConnectedWallet = await _DbContext.Operatives
-            //     .Where(o => o.OperativeId == command.OperativeId)
-            //     .Select(o => o.ConnectedWalletAddress)
-            //     .FirstOrDefaultAsync(cancellationToken);
-
-            // // need to check for case sensitivity
-            // var ifPantryItemExists = await _pantryDbContext.PantryItems
-            //     .Where(p => p.Name == command.Name)
-            //     .FirstOrDefaultAsync(cancellationToken);
-
-            // if (ifPantryItemExists != null)
-            // {
-            //     // TODO: Throw proper typed exception
-            //     throw new Exception("Pantry Item aleady exists");
-            // }
+            if (ifPantryItemExists != null) return Result<PantryItem>.Failure("Pantry item already exists");
 
             var newPantryItem = new PantryItem
             (
@@ -64,11 +59,11 @@ public class CreatePantryItem
                 command.UnitType
             );
 
-            // _pantryDbContext.PantryItems.Add(newPantryItem);
+            _pantryDbContext.PantryItems.Add(newPantryItem);
 
-            // var result = await _pantryDbContext.SaveChangesAsync() > 0;
+            var result = await _pantryDbContext.SaveChangesAsync() > 0;
 
-           // if (!result) return Result<PantryItem>.Failure("Failed to create activity");
+            if (!result) return Result<PantryItem>.Failure("Failed to create pantry item");
 
             return Result<PantryItem>.Success(newPantryItem);
         }
