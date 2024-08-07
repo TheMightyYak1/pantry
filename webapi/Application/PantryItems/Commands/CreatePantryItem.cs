@@ -31,14 +31,12 @@ public class CreatePantryItem
 
     public class Handler :IRequestHandler<Command, Result<PantryItem>>
     {
-        private readonly IMediator _mediator;
         private readonly IPantryDbContext _pantryDbContext;
 
         public Handler(
             IMediator mediator,
             IPantryDbContext pantryDbContext)
         {
-            _mediator = mediator;
             _pantryDbContext = pantryDbContext;
         }
 
