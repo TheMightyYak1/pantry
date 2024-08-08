@@ -1,3 +1,4 @@
+using Application.Common.Interfaces;
 using Application.PantryItems.Commands;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -16,7 +17,9 @@ builder.Services.AddDbContext<PantryDbContext>(opt =>
 {
     opt.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
-builder.Services.AddMediatR(typeof(Program).Assembly);
+builder.Services.AddScoped<IPantryDbContext, PantryDbContext>();
+
+builder.Services.AddMediatR(typeof(CreatePantryItem.Command).Assembly);
 
 var app = builder.Build();
 

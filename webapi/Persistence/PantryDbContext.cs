@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Application.Common.Interfaces;
 
 namespace Persistence;
-public class PantryDbContext : DbContext
+public class PantryDbContext : DbContext, IPantryDbContext
 {
     private readonly string _connectionString;
 
@@ -23,6 +23,9 @@ public class PantryDbContext : DbContext
     }
 
     public DbSet<PantryItem> PantryItems { get; set; }
+
+    public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new()) =>
+        base.SaveChangesAsync(cancellationToken);
 
     protected override void OnModelCreating(ModelBuilder builder)
     {

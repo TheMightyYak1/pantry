@@ -10,7 +10,7 @@ public interface IPantryDbContext
 {
     DbSet<PantryItem> PantryItems { get; set; }
 
-    DbSet<TEntity> Set<TEntity>() where TEntity : class;
+    // DbSet<TEntity> Set<TEntity>() where TEntity : class;
 
     // EntityEntry Entry(object entity);
     // EntityEntry<TEntity> Entry<TEntity>(TEntity entity) where TEntity : class;

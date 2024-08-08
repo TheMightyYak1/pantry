@@ -33,9 +33,7 @@ public class CreatePantryItem
     {
         private readonly IPantryDbContext _pantryDbContext;
 
-        public Handler(
-            IMediator mediator,
-            IPantryDbContext pantryDbContext)
+        public Handler (IPantryDbContext pantryDbContext)
         {
             _pantryDbContext = pantryDbContext;
         }
