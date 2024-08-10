@@ -21,6 +21,15 @@ public class PantryItemsController : BaseApiController
     }
 
     /// <summary>
+    ///     Gets information for a pantry item
+    /// </summary>
+    [HttpGet("{name}")] // pantryItems/id
+    public async Task<ActionResult> GetPantryItem([FromRoute] string name)
+    {
+        return HandleResult(await Mediator.Send(new GetPantryItem.Query(name)));
+    }
+
+    /// <summary>
     ///     Add a new pantry item, and return the create pantry item
     /// </summary>
     [HttpPost]
