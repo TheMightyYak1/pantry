@@ -38,5 +38,14 @@ public class PantryItemsController : BaseApiController
         return HandleResult(await Mediator.Send(command));
     }
 
+    /// <summary>
+    ///     Remove a pantry item
+    /// </summary>
+    [HttpDelete("{name}")]
+    public async Task<ActionResult<PantryItem>> DeletePantryItem([FromRoute] string name)
+    {
+        return HandleResult(await Mediator.Send(new DeletePantryItem.Command(name)));
+    }
+
 
 }
