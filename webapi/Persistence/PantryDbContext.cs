@@ -28,5 +28,17 @@ public class PantryDbContext : DbContext, IPantryDbContext
             entity.HasKey(p => p.PantryItemId);
         });
 
+        builder.Entity<User>(entity =>
+        {
+            entity.HasKey(u => u.UserId);
+        });
+
+        builder.Entity<Recipe>(entity =>
+        {
+            entity.HasKey(r => r.RecipeId);
+            entity.HasOne(r => r.Creator).WithMany(u => u.Recipes).HasForeignKey(r => r.CreatorId);
+        }
+        );
+
     }
 }
