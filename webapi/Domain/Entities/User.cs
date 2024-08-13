@@ -13,7 +13,7 @@ public class User
     public DateTime DateCreated { get; set; } 
 
     public IList<Recipe> Recipes { get; set; }
-
+    public IList<PantryItem> PantryItems { get; set; }
 
     public User(string username, string email)
     {

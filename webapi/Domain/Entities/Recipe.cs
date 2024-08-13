@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using Domain.Model.Ingredients;
 
 namespace Domain.Entities;
 public class Recipe
@@ -12,18 +13,17 @@ public class Recipe
     public string Name { get; set; }
     public string Description { get; set; }
     public List<Ingredient> Ingredients { get; set; }
+    public Guid CreatorId { get; set; }
 
     [JsonIgnore]
     public User Creator { get; set; }
 
-    public Recipe(string name, string description, List<Ingredient> ingredients, User creator)
+    public Recipe(string name, string description, List<Ingredient> ingredients, Guid creatorId)
     {
         RecipeId = Guid.NewGuid();
         Name = name;
         Description = description;
         Ingredients = ingredients;
-        Creator = creator;
+        CreatorId = creatorId;
     }
 }
-
-public record Ingredient (Guid PantryItemId, int Quantity);

@@ -19,13 +19,15 @@ public class CreatePantryItem
         public string Description { get; set; }
         public PantryItemType PantryItemType { get; set; }
         public UnitType UnitType { get; set; }
+        public Guid UserId { get; set; }
 
-        public Command(string name, string description, PantryItemType pantryItemType, UnitType unitType)
+        public Command(string name, string description, PantryItemType pantryItemType, UnitType unitType, Guid userId)
         {
             Name = name;
             Description = description;
             PantryItemType = pantryItemType;
             UnitType = unitType;
+            UserId = userId;
         }
     }
 
@@ -51,7 +53,8 @@ public class CreatePantryItem
                 command.Name,
                 command.Description,
                 command.PantryItemType,
-                command.UnitType
+                command.UnitType,
+                command.UserId
             );
 
             _pantryDbContext.PantryItems.Add(newPantryItem);
