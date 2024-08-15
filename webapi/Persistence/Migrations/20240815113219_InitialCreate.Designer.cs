@@ -11,8 +11,8 @@ using Persistence;
 namespace Persistence.Migrations
 {
     [DbContext(typeof(PantryDbContext))]
-    [Migration("20240813051403_AddUserAndRecipe")]
-    partial class AddUserAndRecipe
+    [Migration("20240815113219_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

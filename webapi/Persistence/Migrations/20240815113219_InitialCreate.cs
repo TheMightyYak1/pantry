@@ -6,18 +6,11 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Persistence.Migrations
 {
     /// <inheritdoc />
-    public partial class AddUserAndRecipe : Migration
+    public partial class InitialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AddColumn<Guid>(
-                name: "CreatorId",
-                table: "PantryItems",
-                type: "TEXT",
-                nullable: false,
-                defaultValue: new Guid("00000000-0000-0000-0000-000000000000"));
-
             migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
@@ -31,6 +24,28 @@ namespace Persistence.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Users", x => x.UserId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "PantryItems",
+                columns: table => new
+                {
+                    PantryItemId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Name = table.Column<string>(type: "TEXT", nullable: true),
+                    Description = table.Column<string>(type: "TEXT", nullable: true),
+                    PantryItemType = table.Column<int>(type: "INTEGER", nullable: false),
+                    UnitType = table.Column<int>(type: "INTEGER", nullable: false),
+                    CreatorId = table.Column<Guid>(type: "TEXT", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_PantryItems", x => x.PantryItemId);
+                    table.ForeignKey(
+                        name: "FK_PantryItems_Users_CreatorId",
+                        column: x => x.CreatorId,
+                        principalTable: "Users",
+                        principalColumn: "UserId",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -63,36 +78,19 @@ namespace Persistence.Migrations
                 name: "IX_Recipes_CreatorId",
                 table: "Recipes",
                 column: "CreatorId");
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_PantryItems_Users_CreatorId",
-                table: "PantryItems",
-                column: "CreatorId",
-                principalTable: "Users",
-                principalColumn: "UserId",
-                onDelete: ReferentialAction.Cascade);
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.DropForeignKey(
-                name: "FK_PantryItems_Users_CreatorId",
-                table: "PantryItems");
+            migrationBuilder.DropTable(
+                name: "PantryItems");
 
             migrationBuilder.DropTable(
                 name: "Recipes");
 
             migrationBuilder.DropTable(
                 name: "Users");
-
-            migrationBuilder.DropIndex(
-                name: "IX_PantryItems_CreatorId",
-                table: "PantryItems");
-
-            migrationBuilder.DropColumn(
-                name: "CreatorId",
-                table: "PantryItems");
         }
     }
 }

@@ -15,10 +15,11 @@ public class User
     public IList<Recipe> Recipes { get; set; }
     public IList<PantryItem> PantryItems { get; set; }
 
-    public User(string username, string email)
+    public User(string username, string bio, string email)
     {
         UserId = Guid.NewGuid();
         Username = username;
+        Bio = bio;
         Email = email;
         DateCreated = DateTime.UtcNow;
     }

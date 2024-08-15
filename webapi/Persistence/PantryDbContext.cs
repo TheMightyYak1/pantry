@@ -2,6 +2,7 @@ using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Application.Common.Interfaces;
 using Domain.Model.Ingredients;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace Persistence;
 public class PantryDbContext : DbContext, IPantryDbContext
@@ -26,6 +27,13 @@ public class PantryDbContext : DbContext, IPantryDbContext
     {
         base.OnModelCreating(builder);
 
+        // remove if sqllite db changed to postgres
+        var ingredientComparer = new ValueComparer<List<Ingredient>>(
+            (c1, c2) => c1.SequenceEqual(c2), // Compare lists by sequence equality
+            c => c.Aggregate(0, (a, v) => HashCode.Combine(a, v.PantryItemId.GetHashCode())), // Hash code generation
+            c => c.ToList() // Deep copy of the list
+        );
+
         builder.Entity<PantryItem>(entity =>
         {
             entity.HasKey(p => p.PantryItemId);
@@ -44,10 +52,12 @@ public class PantryDbContext : DbContext, IPantryDbContext
             entity.HasOne(r => r.Creator).WithMany(u => u.Recipes).HasForeignKey(r => r.CreatorId);
             
             entity.Property(r => r.Ingredients)
+                // remove if sqllite db changed to postgres
                 .HasConversion(
                     v => System.Text.Json.JsonSerializer.Serialize(v, (System.Text.Json.JsonSerializerOptions)null),
                     v => System.Text.Json.JsonSerializer.Deserialize<List<Ingredient>>(v, (System.Text.Json.JsonSerializerOptions)null))
-                    .HasColumnType("TEXT");
+                    .HasColumnType("TEXT")
+                    .Metadata.SetValueComparer(ingredientComparer); // Apply the ValueComparer
                 
             // add in when/if change to postgres
             // entity.Property(r => r.Ingredients).HasColumnType("jsonb");

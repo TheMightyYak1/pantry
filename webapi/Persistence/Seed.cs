@@ -14,25 +14,25 @@ public class Seed
     {
 
         // seed users
-        var users = new List<User>
-        {
-            new User
-            (
-                "PantryMan",
-                "IMakePantryRecipes@mail.com"
-            ),
-            new User
-            (
-                "PantryWoman",
-                "IMakePantryRecipesToo@mail.com"
-            )
-        };
+        var user1 = new User
+        (
+            "PantryMan",
+            "I like yummy food",
+            "IMakePantryRecipes@mail.com"
+        );
+
+        var user2 = new User
+        (
+            "PantryWoman",
+            "I like making more yummy food",
+            "IMakePantryRecipesToo@mail.com"
+        );
 
         // checks if any users
         if (! await pantryDbContext.Users.AnyAsync())
         {
             // add users to db
-            await pantryDbContext.Users.AddRangeAsync(users);
+            await pantryDbContext.Users.AddRangeAsync(user1, user2);
             await pantryDbContext.SaveChangesAsync();
         }
 
@@ -43,7 +43,7 @@ public class Seed
             "Staple of many meals",
             Domain.Model.Enums.PantryItemType.NonPerishable,
             Domain.Model.Enums.UnitType.Cups,
-            users.FirstOrDefault().UserId
+            user1.UserId
         );
 
         var pantryItem2 = new PantryItem
@@ -52,7 +52,7 @@ public class Seed
             "Watch out when cutting!",
             Domain.Model.Enums.PantryItemType.Vegetable,
             Domain.Model.Enums.UnitType.Quantity,
-            users.FirstOrDefault().UserId
+            user1.UserId
         );
 
 
@@ -76,7 +76,7 @@ public class Seed
                     new Ingredient(pantryItem1.PantryItemId, 2),
                     new Ingredient(pantryItem2.PantryItemId, 1)
                 },
-                users.FirstOrDefault().UserId
+                user1.UserId
             )
         };
 
