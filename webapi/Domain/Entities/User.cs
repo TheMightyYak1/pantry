@@ -14,6 +14,7 @@ public class User
 
     public IList<Recipe> Recipes { get; set; }
     public IList<PantryItem> PantryItems { get; set; }
+    public IList<UserPantryItem> UserPantryItems { get; set; }
 
     public User(string username, string bio, string email)
     {

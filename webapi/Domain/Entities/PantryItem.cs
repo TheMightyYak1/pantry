@@ -17,6 +17,8 @@ public class PantryItem
 
     [JsonIgnore]
     public User Creator { get; set; }
+    [JsonIgnore]
+    public IList<UserPantryItem> UserPantryItems { get; set; }
 
     public PantryItem(string name, string description, PantryItemType pantryItemType, UnitType unitType, Guid creatorId)
     {
