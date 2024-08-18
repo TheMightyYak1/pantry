@@ -93,6 +93,30 @@ namespace Persistence.Migrations
                     b.ToTable("Users");
                 });
 
+            modelBuilder.Entity("Domain.Entities.UserPantryItem", b =>
+                {
+                    b.Property<Guid>("UserPantryItemId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("PantryItemId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("UserPantryItemId");
+
+                    b.HasIndex("PantryItemId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserPantryItems");
+                });
+
             modelBuilder.Entity("Domain.Entities.PantryItem", b =>
                 {
                     b.HasOne("Domain.Entities.User", "Creator")
@@ -115,11 +139,37 @@ namespace Persistence.Migrations
                     b.Navigation("Creator");
                 });
 
+            modelBuilder.Entity("Domain.Entities.UserPantryItem", b =>
+                {
+                    b.HasOne("Domain.Entities.PantryItem", "PantryItem")
+                        .WithMany("UserPantryItems")
+                        .HasForeignKey("PantryItemId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.User", "User")
+                        .WithMany("UserPantryItems")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("PantryItem");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Domain.Entities.PantryItem", b =>
+                {
+                    b.Navigation("UserPantryItems");
+                });
+
             modelBuilder.Entity("Domain.Entities.User", b =>
                 {
                     b.Navigation("PantryItems");
 
                     b.Navigation("Recipes");
+
+                    b.Navigation("UserPantryItems");
                 });
 #pragma warning restore 612, 618
         }

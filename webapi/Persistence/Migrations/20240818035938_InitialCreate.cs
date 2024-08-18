@@ -69,6 +69,32 @@ namespace Persistence.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "UserPantryItems",
+                columns: table => new
+                {
+                    UserPantryItemId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    UserId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    PantryItemId = table.Column<Guid>(type: "TEXT", nullable: false),
+                    Quantity = table.Column<int>(type: "INTEGER", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserPantryItems", x => x.UserPantryItemId);
+                    table.ForeignKey(
+                        name: "FK_UserPantryItems_PantryItems_PantryItemId",
+                        column: x => x.PantryItemId,
+                        principalTable: "PantryItems",
+                        principalColumn: "PantryItemId",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_UserPantryItems_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "UserId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_PantryItems_CreatorId",
                 table: "PantryItems",
@@ -78,16 +104,29 @@ namespace Persistence.Migrations
                 name: "IX_Recipes_CreatorId",
                 table: "Recipes",
                 column: "CreatorId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserPantryItems_PantryItemId",
+                table: "UserPantryItems",
+                column: "PantryItemId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserPantryItems_UserId",
+                table: "UserPantryItems",
+                column: "UserId");
         }
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "PantryItems");
+                name: "Recipes");
 
             migrationBuilder.DropTable(
-                name: "Recipes");
+                name: "UserPantryItems");
+
+            migrationBuilder.DropTable(
+                name: "PantryItems");
 
             migrationBuilder.DropTable(
                 name: "Users");

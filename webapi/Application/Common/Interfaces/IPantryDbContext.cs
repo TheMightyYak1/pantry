@@ -11,6 +11,7 @@ public interface IPantryDbContext
     DbSet<PantryItem> PantryItems { get; set; }
     DbSet<User> Users { get; set; }
     DbSet<Recipe> Recipes { get; set; }
+    DbSet<UserPantryItem> UserPantryItems { get; set; }
 
     // DbSet<TEntity> Set<TEntity>() where TEntity : class;
 

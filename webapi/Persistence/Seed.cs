@@ -88,6 +88,37 @@ public class Seed
             await pantryDbContext.SaveChangesAsync();
         }
 
+        // seed UserPantryItems
+        var userPantryItems = new List<UserPantryItem>
+        {
+            new UserPantryItem
+            (
+                user1.UserId,
+                pantryItem1.PantryItemId,
+                5
+            ),
+            new UserPantryItem
+            (
+                user1.UserId,
+                pantryItem2.PantryItemId,
+                5
+            ),
+            new UserPantryItem
+            (
+                user2.UserId,
+                pantryItem1.PantryItemId,
+                5
+            )
+        };
+
+        // check if any recipes
+        if (! await pantryDbContext.UserPantryItems.AnyAsync())
+        {   
+            // add pantry items to db
+            await pantryDbContext.UserPantryItems.AddRangeAsync(userPantryItems);
+            await pantryDbContext.SaveChangesAsync();
+        }
+
         return;
 
     }

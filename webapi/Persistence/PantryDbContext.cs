@@ -19,6 +19,7 @@ public class PantryDbContext : DbContext, IPantryDbContext
     public DbSet<PantryItem> PantryItems { get; set; }
     public DbSet<User> Users { get; set; }
     public DbSet<Recipe> Recipes { get; set; }
+    public DbSet<UserPantryItem> UserPantryItems { get; set; }
 
     // public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new()) =>
     //     base.SaveChangesAsync(cancellationToken);
@@ -38,7 +39,6 @@ public class PantryDbContext : DbContext, IPantryDbContext
         {
             entity.HasKey(p => p.PantryItemId);
             entity.HasOne(r => r.Creator).WithMany(u => u.PantryItems).HasForeignKey(r => r.CreatorId);
-
         });
 
         builder.Entity<User>(entity =>
@@ -61,6 +61,20 @@ public class PantryDbContext : DbContext, IPantryDbContext
                 
             // add in when/if change to postgres
             // entity.Property(r => r.Ingredients).HasColumnType("jsonb");
+        });
+
+        builder.Entity<UserPantryItem>(entity =>
+        {
+            entity.HasKey(u => u.UserPantryItemId);
+            entity.HasOne(u => u.User)
+                .WithMany(user => user.UserPantryItems)
+                .HasForeignKey(u => u.UserId)
+                .OnDelete(DeleteBehavior.Cascade);
+            entity.HasOne(u => u.PantryItem)
+                .WithMany(item => item.UserPantryItems)
+                .HasForeignKey(u => u.PantryItemId)
+                .OnDelete(DeleteBehavior.Restrict);
+            entity.Property(u => u.Quantity).IsRequired();
         });
 
     }
