@@ -26,7 +26,7 @@ public class GetPantryItem
         {
             // TODO: Send back DTO without ID
             var pantryItem = await _pantryDbContext.PantryItems
-                .FirstOrDefaultAsync(p => p.Name.ToLower() == request.Name.ToLower());
+                .FirstOrDefaultAsync(p => p.Name.Equals(request.Name, StringComparison.CurrentCultureIgnoreCase), cancellationToken);
 
             if (pantryItem == null) return Result<PantryItem>.Failure("No Pantry Item");
 
