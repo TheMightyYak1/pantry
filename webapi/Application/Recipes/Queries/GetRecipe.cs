@@ -5,18 +5,14 @@ using System.Threading.Tasks;
 using Application.Common.Interfaces;
 using Application.Core;
 using Application.Recipes.DTOs;
-using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
 namespace Application.Recipes.Queries;
-public class GetRecipes
+public class GetRecipe
 {
-    public class Query : IRequest<Result<List<RecipesDto>>>
-    {
-        
-    }
-    public class Handler : IRequestHandler<Query, Result<List<RecipesDto>>>
+    public record Query(Guid Id) : IRequest<Result<RecipeDto>>;
+    public class Handler : IRequestHandler<Query, Result<RecipeDto>>
     {
         private readonly IPantryDbContext _pantryDbContext;
 
@@ -25,10 +21,18 @@ public class GetRecipes
             _pantryDbContext = pantryDbContext;
         }
 
-        public async Task<Result<List<RecipesDto>>> Handle(Query request, CancellationToken cancellationToken)
+        public async Task<Result<RecipeDto>> Handle(Query request, CancellationToken cancellationToken)
         {
+            // Get recipe from Db
+            var recipe = await _pantryDbContext.Recipes
+                .FirstOrDefaultAsync(r => r.RecipeId == request.Id);
+
+            if (recipe == null) return Result<RecipeDto>.Failure("No Recipe");
+
+            // Get List PantryItem details
+
             var recipes = await _pantryDbContext.Recipes
-                .Select(recipe => new RecipesDto
+                .Select(recipe => new RecipeDto
                 (
                     recipe.RecipeId,
                     recipe.Name,
@@ -37,9 +41,7 @@ public class GetRecipes
                 ))
                 .ToListAsync(cancellationToken);
 
-            if (recipes == null) return Result<List<RecipesDto>>.Failure("No Recipes");
-
-            return Result<List<RecipesDto>>.Success(recipes);
+            return Result<RecipeDto>.Success(recipes);
         }
     }
 }

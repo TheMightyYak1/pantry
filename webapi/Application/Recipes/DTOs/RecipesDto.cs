@@ -4,10 +4,10 @@ using System.Linq;
 using System.Threading.Tasks;
 
 namespace Application.Recipes.DTOs;
-public record RecipeDto(
+public record RecipesDto(
+
     Guid RecipeId,
     string Name,
     string Description,
-
+    string CreatorUsername
 );
-        

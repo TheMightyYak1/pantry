@@ -17,5 +17,14 @@ public class RecipeController : BaseApiController
         return HandleResult(await Mediator.Send(new GetRecipes.Query()));
     }
 
+
+    /// <summary>
+    ///     Gets details for a recipe
+    /// </summary>
+    [HttpGet("{id}")]
+    public async Task<ActionResult> GetRecipe([FromRoute] Guid id)
+    {
+        return HandleResult(await Mediator.Send(new GetRecipe.Query(id)));
+    }
     
 }
