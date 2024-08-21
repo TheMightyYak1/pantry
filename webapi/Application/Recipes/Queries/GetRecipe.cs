@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Application.Common.Interfaces;
 using Application.Core;
 using Application.Recipes.DTOs;
+using Domain.Model.Ingredients;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 
@@ -29,7 +30,19 @@ public class GetRecipe
 
             if (recipe == null) return Result<RecipeDto>.Failure("No Recipe");
 
+            var test = recipe.Ingredients;
+
+
+            // Deserialize ingredient data
+            // can change step once moved to postgres db
+            var ingredientList = System.Text.Json.JsonSerializer.Deserialize<List<Ingredient>>(test);
+
             // Get List PantryItem details
+            var ingredients = await _pantryDbContext.PantryItems
+                .Select(i => i.PantryItemId == recipe.Ingredients.)
+            
+            recipe.Ingredients
+                .Select(i => i.PantryItemId == );
 
             var recipes = await _pantryDbContext.Recipes
                 .Select(recipe => new RecipeDto
