@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using Application.Common.Interfaces;
 using Application.Core;
 using Application.Recipes.DTOs;
+using Domain.Entities;
 using Domain.Model.Ingredients;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
@@ -26,16 +28,14 @@ public class GetRecipe
         {
             // Get recipe from Db
             var recipe = await _pantryDbContext.Recipes
-                .FirstOrDefaultAsync(r => r.RecipeId == request.Id);
+                .Select(r => r.RecipeId == request.Id)
+                .Select();
 
             if (recipe == null) return Result<RecipeDto>.Failure("No Recipe");
 
-            var test = recipe.Ingredients;
 
 
-            // Deserialize ingredient data
-            // can change step once moved to postgres db
-            var ingredientList = System.Text.Json.JsonSerializer.Deserialize<List<Ingredient>>(test);
+        
 
             // Get List PantryItem details
             var ingredients = await _pantryDbContext.PantryItems
@@ -55,6 +55,17 @@ public class GetRecipe
                 .ToListAsync(cancellationToken);
 
             return Result<RecipeDto>.Success(recipes);
+        }
+
+        public async Task<List<PantryItem>> GetPantryItemFromIngredient (List<Ingredient> ingredients, CancellationToken cancellationToken)
+        {
+            var ingredientPantryItemIds = ingredients.Select(x => x.PantryItemId).ToList();
+
+            var ingredientList = await _pantryDbContext.PantryItems
+                .Where(p => ingredientPantryItemIds.Contains(p.PantryItemId))
+                .ToListAsync();
+
+            return;
         }
     }
 }
