@@ -19,7 +19,7 @@ public class RecipeDetailed
         Name = name;
         Description = description;
         Ingredients = ingredients;
-        CreatorName = CreatorName;
+        CreatorName = creatorName;
     }
 }
 
