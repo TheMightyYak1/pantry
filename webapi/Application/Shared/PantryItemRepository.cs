@@ -20,8 +20,25 @@ public class PantryItemRepository
 
     public async Task<RecipeDetailed> GetRecipeDetailed(Guid recipeId, CancellationToken cancellationToken)
     {
-        
+        // TODO: handle errors
 
+        // Optional: can combine the LINQ query for 1 db query to optimise
+
+        var recipe = await _pantryDbContext.Recipes
+            .FirstOrDefaultAsync(r => r.RecipeId == recipeId);
+
+        var ingredientsDetailed = GetListIngredientDetailed(recipe.Ingredients, cancellationToken);
+
+        var recipeDetailed = new RecipeDetailed
+        (
+            recipe.RecipeId,
+            recipe.Name,
+            recipe.Description,
+            ingredientsDetailed.Result,
+            recipe.Creator.Username
+        );
+
+        return recipeDetailed;
     }
 
     public async Task<List<IngredientDetailed>> GetListIngredientDetailed (List<Ingredient> ingredients, CancellationToken cancellationToken)
@@ -38,7 +55,7 @@ public class PantryItemRepository
                 pantryItem.Name,
                 pantryItem.Description,
                 // potentiall use a join function to optimise
-                ingredients.First(i => i.PantryItemId == pantryItem.PantryItemId).Quantity,
+                ingredients.FirstOrDefault(i => i.PantryItemId == pantryItem.PantryItemId).Quantity,
                 pantryItem.UnitType
             ))
             .ToListAsync(cancellationToken);

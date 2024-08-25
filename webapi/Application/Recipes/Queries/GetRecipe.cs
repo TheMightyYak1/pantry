@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Application.Common.Interfaces;
 using Application.Core;
 using Application.Recipes.DTOs;
+using Application.Shared;
 using Domain.Entities;
 using Domain.Model.Ingredients;
 using MediatR;
@@ -14,58 +15,28 @@ using Microsoft.EntityFrameworkCore;
 namespace Application.Recipes.Queries;
 public class GetRecipe
 {
-    public record Query(Guid Id) : IRequest<Result<RecipeDto>>;
-    public class Handler : IRequestHandler<Query, Result<RecipeDto>>
+    public record Query(Guid Id) : IRequest<Result<RecipeDetailed>>;
+    public class Handler : IRequestHandler<Query, Result<RecipeDetailed>>
     {
         private readonly IPantryDbContext _pantryDbContext;
+        private readonly PantryItemRepository _pantryItemRepository;
 
-        public Handler (IPantryDbContext pantryDbContext)
+        public Handler (IPantryDbContext pantryDbContext,
+            PantryItemRepository pantryItemRepository)
         {
             _pantryDbContext = pantryDbContext;
+            _pantryItemRepository = pantryItemRepository;
         }
 
-        public async Task<Result<RecipeDto>> Handle(Query request, CancellationToken cancellationToken)
+        public async Task<Result<RecipeDetailed>> Handle(Query request, CancellationToken cancellationToken)
         {
-            // Get recipe from Db
-            var recipe = await _pantryDbContext.Recipes
-                .Select(r => r.RecipeId == request.Id)
-                .Select();
+            // Get recipe 
+            var recipe = _pantryItemRepository.GetRecipeDetailed(request.Id, cancellationToken);
 
-            if (recipe == null) return Result<RecipeDto>.Failure("No Recipe");
+            if (recipe.Result == null) return Result<RecipeDetailed>.Failure("No Recipe");
 
-
-
-        
-
-            // Get List PantryItem details
-            var ingredients = await _pantryDbContext.PantryItems
-                .Select(i => i.PantryItemId == recipe.Ingredients.)
-            
-            recipe.Ingredients
-                .Select(i => i.PantryItemId == );
-
-            var recipes = await _pantryDbContext.Recipes
-                .Select(recipe => new RecipeDto
-                (
-                    recipe.RecipeId,
-                    recipe.Name,
-                    recipe.Description,
-                    recipe.Creator.Username
-                ))
-                .ToListAsync(cancellationToken);
-
-            return Result<RecipeDto>.Success(recipes);
+            return Result<RecipeDetailed>.Success(recipe.Result);
         }
 
-        public async Task<List<PantryItem>> GetPantryItemFromIngredient (List<Ingredient> ingredients, CancellationToken cancellationToken)
-        {
-            var ingredientPantryItemIds = ingredients.Select(x => x.PantryItemId).ToList();
-
-            var ingredientList = await _pantryDbContext.PantryItems
-                .Where(p => ingredientPantryItemIds.Contains(p.PantryItemId))
-                .ToListAsync();
-
-            return;
-        }
     }
 }
