@@ -31,11 +31,11 @@ public class GetRecipe
         public async Task<Result<RecipeDetailed>> Handle(Query request, CancellationToken cancellationToken)
         {
             // Get recipe 
-            var recipe = _pantryItemRepository.GetRecipeDetailed(request.Id, cancellationToken);
+            var recipe = await _pantryItemRepository.GetRecipeDetailed(request.Id, cancellationToken);
 
-            if (recipe.Result == null) return Result<RecipeDetailed>.Failure("No Recipe");
+            if (recipe == null) return Result<RecipeDetailed>.Failure("No Recipe");
 
-            return Result<RecipeDetailed>.Success(recipe.Result);
+            return Result<RecipeDetailed>.Success(recipe);
         }
 
     }

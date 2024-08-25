@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Application.Common.Interfaces;
+using Application.Core;
 using Domain.Entities;
 using Domain.Model.Ingredients;
 using Microsoft.EntityFrameworkCore;
@@ -35,6 +36,19 @@ public class PantryItemRepository
             recipe.Name,
             recipe.Description,
             ingredientsDetailed.Result,
+            // recipe.Ingredients.Join(
+            //     _pantryDbContext.PantryItems,
+            //     ingredient => ingredient.PantryItemId,
+            //     pantryItem => pantryItem.PantryItemId,
+            //     (ingredient, pantryItem) => new IngredientDetailed
+            //     (
+            //         pantryItem.PantryItemId,
+            //         pantryItem.Name,
+            //         pantryItem.Description,
+            //         ingredient.Quantity,
+            //         pantryItem.UnitType
+            //     )
+            // ).ToList(),
             recipe.Creator.Username
         );
 
@@ -45,20 +59,25 @@ public class PantryItemRepository
     {
         // TODO: check if 0 ingredients
 
-        var ingredientPantryItemIds = ingredients.Select(i => i.PantryItemId).ToList();
+        //var ingredientPantryItemIds = ingredients.Select(i => i.PantryItemId).ToList();
 
-        var ingredientsDetailed = await _pantryDbContext.PantryItems
-            .Where(p => ingredientPantryItemIds.Contains(p.PantryItemId))
-            .Select(pantryItem => new IngredientDetailed
+        var ingredientQuantities = ingredients.ToDictionary(i => i.PantryItemId, i => i.Quantity);
+
+        var pantryItemsDetailed = await _pantryDbContext.PantryItems
+            .Where(p => ingredientQuantities.Keys.Contains(p.PantryItemId))
+            .ToListAsync(cancellationToken);
+
+        var ingredientsDetailed = pantryItemsDetailed.Select(
+            pantryItem => new IngredientDetailed
             (
                 pantryItem.PantryItemId,
                 pantryItem.Name,
                 pantryItem.Description,
-                // potentiall use a join function to optimise
-                ingredients.FirstOrDefault(i => i.PantryItemId == pantryItem.PantryItemId).Quantity,
+                // potential use a join function to optimise
+                ingredientQuantities[pantryItem.PantryItemId],
                 pantryItem.UnitType
             ))
-            .ToListAsync(cancellationToken);
+            .ToList();
 
             return ingredientsDetailed;
     }
