@@ -25,6 +25,7 @@ public class GetPantryItem
         public async Task<Result<PantryItem>> Handle(Query request, CancellationToken cancellationToken)
         {
             // TODO: Send back DTO without ID
+            // TODO: check if still works
             var pantryItem = await _pantryDbContext.PantryItems
                 .FirstOrDefaultAsync(p => p.Name.Equals(request.Name, StringComparison.CurrentCultureIgnoreCase), cancellationToken);
 

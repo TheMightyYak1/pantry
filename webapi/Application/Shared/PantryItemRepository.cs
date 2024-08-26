@@ -26,6 +26,7 @@ public class PantryItemRepository
         // Optional: can combine the LINQ query for 1 db query to optimise
 
         var recipe = await _pantryDbContext.Recipes
+            .Include(r => r.Creator)
             .FirstOrDefaultAsync(r => r.RecipeId == recipeId);
 
         var ingredientsDetailed = GetListIngredientDetailed(recipe.Ingredients, cancellationToken);
@@ -79,7 +80,7 @@ public class PantryItemRepository
             ))
             .ToList();
 
-            return ingredientsDetailed;
+        return ingredientsDetailed;
     }
 
 }

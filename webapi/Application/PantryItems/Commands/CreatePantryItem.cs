@@ -43,6 +43,7 @@ public class CreatePantryItem
         public async Task<Result<PantryItem>> Handle(Command command, CancellationToken cancellationToken)
         {
             // check if PantryItem already exists
+            // TODO: check if this still works
             var pantryItemExists = await _pantryDbContext.PantryItems
                 .AnyAsync(p => p.Name.Equals(command.Name, StringComparison.CurrentCultureIgnoreCase), cancellationToken);
 
