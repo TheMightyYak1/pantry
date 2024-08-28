@@ -83,4 +83,9 @@ public class PantryItemRepository
         return ingredientsDetailed;
     }
 
+    public async Task<> GetUsersPantryItems (Guid UserId, CancellationToken)
+    {
+        
+    }
+
 }

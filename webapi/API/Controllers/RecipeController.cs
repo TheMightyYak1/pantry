@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Application.Recipes.Commands;
 using Application.Recipes.Queries;
+using Application.Shared;
 using Domain.Entities;
 using Microsoft.AspNetCore.Mvc;
 
@@ -36,5 +37,14 @@ public class RecipeController : BaseApiController
     {
         return HandleResult(await Mediator.Send(command));
     }
-    
+
+    /// <summary>
+    ///     Gets ingredients user needs to make the recipe
+    /// </summary>
+    [HttpGet("{userId}/{recipeId}")]
+    public async Task<ActionResult<List<IngredientDetailed>>> GetIngredientsLeftForRecipe([FromRoute] Guid userId, Guid recipeId) 
+    {
+        return HandleResult(await Mediator.Send(new GetIngredientsLeftForRecipe.Query(userId, recipeId)));
+    }
+
 }

@@ -38,6 +38,8 @@ public class CreateRecipe
         }
         public async Task<Result<Recipe>> Handle(Command command, CancellationToken cancellationToken)
         {
+            // TODO: check if User exists
+
             // check if Recipe already exists by User
             var recipeUserExists = await _pantryDbContext.Recipes
                 .AnyAsync(r =>
