@@ -10,8 +10,8 @@ using MediatR;
 namespace Application.Recipes.Queries;
 public class GetIngredientsLeftForRecipe
 {
-    public record Query(Guid UserId, Guid RecipeId) : IRequest<Result<IngredientDetailed>>;
-    public class Handler : IRequestHandler<Query, Result<IngredientDetailed>>
+    public record Query(Guid UserId, Guid RecipeId) : IRequest<Result<List<IngredientDetailed>>>;
+    public class Handler : IRequestHandler<Query, Result<List<IngredientDetailed>>>
     {
         private readonly IPantryDbContext _pantryDbContext;
         private readonly PantryItemRepository _pantryItemRepository;
@@ -23,23 +23,21 @@ public class GetIngredientsLeftForRecipe
             _pantryItemRepository = pantryItemRepository;
         }
 
-        public async Task<Result<IngredientDetailed>> Handle(Query request, CancellationToken cancellationToken)
+        public async Task<Result<List<IngredientDetailed>>> Handle(Query request, CancellationToken cancellationToken)
         {
             // Get Users pantryItem
-            // from repo
-            
-
+            var usersPantryItems = await _pantryItemRepository.GetUsersPantryItems(request.UserId, cancellationToken);
 
             // Get recipe
-            var recipe = await _pantryItemRepository.
+            var recipe = await _pantryItemRepository.GetRecipeDetailed(request.RecipeId, cancellationToken);
+
+            var additionalIngredientsForRecipe = await _pantryItemRepository.AdditionalIngredientsForRecipe(recipe, usersPantryItems, cancellationToken);
 
 
 
+            if (recipe == null) return Result<List<IngredientDetailed>>.Failure("No Recipe");
 
-
-            if (recipe == null) return Result<IngredientDetailed>.Failure("No Recipe");
-
-            return Result<IngredientDetailed>.Success(recipe);
+            return Result<List<IngredientDetailed>>.Success(additionalIngredientsForRecipe);
         }
 
     }

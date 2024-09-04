@@ -83,9 +83,53 @@ public class PantryItemRepository
         return ingredientsDetailed;
     }
 
-    public async Task<> GetUsersPantryItems (Guid UserId, CancellationToken)
+    public async Task<List<IngredientDetailed>> GetUsersPantryItems (Guid UserId, CancellationToken cancellationToken)
     {
-        
+        var usersPantryItems = await _pantryDbContext.UserPantryItems
+            .Where(p => p.UserId == UserId)
+            .Select(pantryItem => new IngredientDetailed
+            (
+                pantryItem.PantryItemId,
+                pantryItem.PantryItem.Name,
+                pantryItem.PantryItem.Description,
+                pantryItem.Quantity,
+                pantryItem.PantryItem.UnitType
+            ))
+            .ToListAsync(cancellationToken);
+
+        return usersPantryItems;
     }
+
+    // TODO: check if it works
+    public async Task<List<IngredientDetailed>> AdditionalIngredientsForRecipe(
+        RecipeDetailed recipe,
+        List<IngredientDetailed> userIngredients,
+        CancellationToken cancellationToken)
+    {
+        // Convert users ingredients to a dictionary for fast lookup
+        var userIngredientsDict = userIngredients.ToDictionary(ui => ui.PantryItemId);
+
+        // Builds additional ingredient list
+        var additionalIngredients = recipe.Ingredients
+            .Select(recipeIngredient => 
+            {
+                // Check if the ingredient is available in the user's pantry
+                var userIngredientExists = userIngredientsDict.TryGetValue(recipeIngredient.PantryItemId, out var userIngredient);
+                
+                // Calculate required additional quantity of ingredients
+                var additionalQuantity = recipeIngredient.Quantity - (userIngredientExists ? userIngredient.Quantity : 0);
+
+                return new IngredientDetailed(
+                recipeIngredient.PantryItemId,
+                recipeIngredient.Name,
+                recipeIngredient.Description,
+                additionalQuantity > 0 ? additionalQuantity : 0, // Only add if more is needed
+                recipeIngredient.UnitType );
+            })
+            .Where(i => i.Quantity > 0)
+            .ToList();
+
+            return additionalIngredients;
+    } 
 
 }
