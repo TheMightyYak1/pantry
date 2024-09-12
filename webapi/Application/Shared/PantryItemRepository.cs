@@ -101,10 +101,9 @@ public class PantryItemRepository
     }
 
     // TODO: check if it works
-    public async Task<List<IngredientDetailed>> AdditionalIngredientsForRecipe(
+    public List<IngredientDetailed> AdditionalIngredientsForRecipe(
         RecipeDetailed recipe,
-        List<IngredientDetailed> userIngredients,
-        CancellationToken cancellationToken)
+        List<IngredientDetailed> userIngredients)
     {
         // Convert users ingredients to a dictionary for fast lookup
         var userIngredientsDict = userIngredients.ToDictionary(ui => ui.PantryItemId);

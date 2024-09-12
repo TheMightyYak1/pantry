@@ -31,9 +31,7 @@ public class GetIngredientsLeftForRecipe
             // Get recipe
             var recipe = await _pantryItemRepository.GetRecipeDetailed(request.RecipeId, cancellationToken);
 
-            var additionalIngredientsForRecipe = await _pantryItemRepository.AdditionalIngredientsForRecipe(recipe, usersPantryItems, cancellationToken);
-
-
+            var additionalIngredientsForRecipe = _pantryItemRepository.AdditionalIngredientsForRecipe(recipe, usersPantryItems);
 
             if (recipe == null) return Result<List<IngredientDetailed>>.Failure("No Recipe");
 
