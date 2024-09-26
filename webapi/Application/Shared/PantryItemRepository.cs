@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Metadata.Ecma335;
 using System.Threading.Tasks;
 using Application.Common.Interfaces;
 using Application.Core;
@@ -130,5 +131,33 @@ public class PantryItemRepository
 
             return additionalIngredients;
     } 
+
+    public async Task<List<Recipe>> RecipesUserCanMake(
+        List<IngredientDetailed> userIngredients,
+        CancellationToken cancellationToken)
+    {
+        // Convert users ingredients to a dictionary for fast lookup
+        var userPantry = userIngredients
+            .ToDictionary(userPantryItem => userPantryItem.PantryItemId, userPantryItem => userPantryItem.Quantity);
+
+        // Builds recipe list available to user
+        var availableRecipes = new List<Recipe>();
+
+        foreach(var recipe in _pantryDbContext.Recipes)
+        {
+            bool canMakeRecipe = recipe.Ingredients.All(ingredient =>
+            {
+                return userPantry.TryGetValue(ingredient.PantryItemId, out var availableQuantity) &&
+                availableQuantity >= ingredient.Quantity;
+            });
+
+            if (canMakeRecipe)
+            {
+                availableRecipes.Add(recipe);
+            }
+        }
+
+        return availableRecipes;
+    }
 
 }
