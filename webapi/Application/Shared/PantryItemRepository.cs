@@ -140,10 +140,13 @@ public class PantryItemRepository
         var userPantry = userIngredients
             .ToDictionary(userPantryItem => userPantryItem.PantryItemId, userPantryItem => userPantryItem.Quantity);
 
+        // Get Recipes
+        var recipes = await _pantryDbContext.Recipes.ToListAsync(cancellationToken);
+
         // Builds recipe list available to user
         var availableRecipes = new List<Recipe>();
 
-        foreach(var recipe in _pantryDbContext.Recipes)
+        foreach(var recipe in recipes)
         {
             bool canMakeRecipe = recipe.Ingredients.All(ingredient =>
             {
