@@ -24,6 +24,9 @@ public class GetUserPantryItems
 
         public async Task<Result<List<IngredientDetailed>>> Handle(Query request, CancellationToken cancellationToken)
         {
+            // Gets a list of all user pantry items
+            // Adds quantities of like types
+            
             var userPantryItem = await _pantryItemRepository.GetUsersPantryItems(request.UserId, cancellationToken);
 
 

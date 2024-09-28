@@ -84,6 +84,7 @@ public class PantryItemRepository
         return ingredientsDetailed;
     }
 
+    // TODO: Update to add like pantry items together
     public async Task<List<IngredientDetailed>> GetUsersPantryItems (Guid UserId, CancellationToken cancellationToken)
     {
         var usersPantryItems = await _pantryDbContext.UserPantryItems
